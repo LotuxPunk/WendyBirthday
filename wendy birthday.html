@@ -1,0 +1,813 @@
+<!doctype html>
+<html lang="fr">
+	<head>
+		<meta charset="utf-8"/>
+		<title>NON, RIEN DE RIEN ! NON, JE ME RAPPEL DE RIEN !</title>
+	</head>
+	<style>
+		body {
+		  margin: 0;
+		  background: #020202;
+		  cursor: crosshair;
+		}
+		canvas{display:block}
+		h1 {
+		  position: absolute;
+		  top: 20%;
+		  left: 50%;
+		  transform: translate(-50%, -50%);
+		  color: #fff;
+		  font-family: "Source Sans Pro";
+		  font-size: 5em;
+		  font-weight: 900;
+		  -webkit-user-select: none;
+		  user-select: none;
+		}
+
+		.name{
+		  color: #aaa;
+		  font-size: 12px;
+		  position: fixed;
+		  bottom: 10px;
+		  right: 10px;
+		  text-align: right;
+		}
+
+		.name div:first-of-type{
+		  font-size: 14px;
+		}
+
+		.name a{
+		  color: #aaa;
+		}
+
+		.name a:hover{
+		  color: #888;
+		}
+
+		.left{
+		  float: left;
+		}
+
+		.right{
+		  float: right;
+		}
+
+
+
+		.perspective{
+		  -webkit-perspective: 1200px;
+		}
+
+		.tardis-wrap{
+		  -webkit-transform-style: preserve-3d;
+		  -webkit-transform : translateZ(-300px);
+
+		  -webkit-animation: zoom-away 12s ease 8s;
+		}
+
+		.tardis{
+		  position: relative;
+		  width: 200px;
+		  height: 200px;
+		  margin: 100px auto;
+		  
+		  -webkit-transform-style: preserve-3d;
+		  -webkit-transform-origin: 50% 50%;
+		  -webkit-transform : rotateX(-20deg) rotateY(-30deg);
+
+		  -webkit-animation : fade-in 8s ease, take-off 12s ease 8s;
+		  /*-webkit-animation: take-off 12s ease;*/
+		}
+
+
+
+
+		/*
+		#
+		# Begin details
+		#
+		*/
+		.tardis .side{
+		  position: absolute;
+		  top: 0px;
+		  left: 0px;
+		  width: 200px;
+		  height: 360px;
+		  background-color: #3f577d;
+		  
+		  box-shadow: inset 1px 0 0 #313d49, inset -1px 0 0 #313d49, inset 0 1px 0 #313d49, inset 0 -1px 0 #313d49;
+
+		  -webkit-transform-style: preserve-3d;
+		  z-index: 1;
+		}
+
+		.side:nth-of-type(1){
+		  -webkit-transform : translateZ(100px);
+		}
+
+		.side:nth-of-type(2){
+		  -webkit-transform : rotateY(90deg) translateZ(100px);
+		}
+
+		.side:nth-of-type(3){
+		  -webkit-transform : rotateY(180deg) translateZ(100px);
+		}
+
+		.side:nth-of-type(4){
+		  -webkit-transform : rotateY(-90deg) translateZ(100px);
+		}
+
+		.tardis .roof{
+		  position: absolute;
+		  width: 200px;
+		  height: 200px;
+		  background-color: #3f577d;
+		  -webkit-transform-style: preserve-3d;
+		  -webkit-transform : rotateX(-90deg) translateZ(-100px);
+		  z-index: 2;
+		}
+
+
+		/* The top roof box */
+		.roof-top{
+		  position: absolute;
+		  
+		  left: 30px;
+		  width: 140px;
+		  height: 140px;
+		  z-index: 2; 
+		  -webkit-transform-style: preserve-3d;
+		}
+
+		.top-lid{
+		  width: 140px;
+		  height: 140px;
+		  background-color: #355683;
+
+		  -webkit-transform-style: preserve-3d;
+		  -webkit-transform : rotateX(-90deg) translateZ(-89px);
+		}
+
+		.roof-panel{
+		  position: absolute;
+		  width: 140px;
+		  height: 20px;
+		  background-color: #445d84;
+		  box-shadow: inset 1px 0 0 #313d49, inset -1px 0 0 #313d49, inset 0 1px 0 #313d49, inset 0 -1px 0 #313d49;
+		  top: -20px;
+		  -webkit-transform-style: preserve-3d;
+		}
+
+		.roof-panel.a{
+		  -webkit-transform: rotateY(0deg) translateZ(70px);
+		}
+
+		.roof-panel.b{
+		 -webkit-transform: rotateY(90deg) translateZ(70px);
+		}
+
+		.roof-panel.c{
+		  -webkit-transform: rotateY(180deg) translateZ(70px);
+		}
+
+		.roof-panel.d{
+		  -webkit-transform: rotateY(-90deg) translateZ(70px);
+		}
+
+		/* Light */
+		.light{
+		  position: absolute;
+		  width: 40px;
+		  height: 40px;
+		  top: -60px;
+		  left: 85px;
+		  z-index: 3;
+		  -webkit-transform-style: preserve-3d;
+		}
+
+		.light-lid{
+		  width: 30px;
+		  height: 30px;
+		  background-color: #eee;
+		  
+
+		  -webkit-transform-style: preserve-3d;
+		  -webkit-transform : rotateX(-90deg) translateZ(-14px);
+		}
+
+		.light .light-panel{
+		  position: absolute;
+		  width: 30px;
+		  height: 40px;
+		  
+		  -webkit-transform-style: preserve-3d;
+		}
+
+		.light .light-panel .bottom{
+		  width: 30px;
+		  height: 12px;
+		  position: absolute;
+		  bottom: 0px;
+		  background-color: #355683;
+		  box-shadow: inset 1px 0 0 #313d49, inset -1px 0 0 #313d49, inset 0 1px 0 #313d49, inset 0 -1px 0 #313d49;
+		}
+
+		.light .light-panel .top{
+		  width: 30px;
+		  height: 28px;
+		  position: absolute;
+		  top: 0px;
+		  background-color: #eee;
+		  box-shadow: inset 1px 0 0 #fff, inset -1px 0 0 #fff, inset 0 1px 0 #fff, inset 0 -1px 0 #fff;
+		}
+
+		.light-panel.a{
+		  -webkit-transform: rotateY(0deg) translateZ(15px);
+		}
+		.light-panel.b{
+		  -webkit-transform: rotateY(90deg) translateZ(15px);
+		}
+		.light-panel.c{
+		  -webkit-transform: rotateY(180deg) translateZ(15px);
+		}
+		.light-panel.d{
+		  -webkit-transform: rotateY(-90deg) translateZ(15px);
+		}
+
+
+		/* Floor */
+		.tardis .floor{
+		  position: absolute;
+		  width: 220px;
+		  height: 220px;
+		  left: -10px;
+		  top: 360px;
+		  -webkit-transform-style: preserve-3d;
+		}
+
+		.floor-lid{
+		  position: absolute;
+		  width: 220px;
+		  height: 220px;
+		  background-color: #355683;
+		  -webkit-transform-style: preserve-3d;
+		  -webkit-transform: rotateX(90deg) translateZ(109px);;
+		}
+
+		.floor-panel{
+		  position: absolute;
+		  width: 220px;
+		  height: 10px;
+		  background-color: #3f577d;
+		  box-shadow: inset 1px 0 0 #313d49, inset -1px 0 0 #313d49, inset 0 1px 0 #313d49, inset 0 -1px 0 #313d49;
+		  -webkit-transform-style: preserve-3d;
+		}
+
+		.floor-panel.a{
+		  -webkit-transform: rotateY(0deg) translateZ(110px);
+		}
+
+		.floor-panel.b{
+		 -webkit-transform: rotateY(90deg) translateZ(110px);
+		}
+
+		.floor-panel.c{
+		  -webkit-transform: rotateY(180deg) translateZ(110px);
+		}
+
+		.floor-panel.d{
+		  -webkit-transform: rotateY(-90deg) translateZ(110px);
+		}
+
+
+
+
+
+
+
+		/*
+		#
+		# Top sign
+		#
+		*/
+		.side .top-sign{
+		  width: 180px;
+		  height: 28px;
+		  background-color: #445d84; 
+		  border: solid 1px #54749f;
+		  box-shadow: 0px 2px 4px rgba(0,0,0,.4);
+		  border-radius: 2px;
+		  position: absolute;
+		  top: 10px;
+		  left: 10px;
+
+		  z-index: 10;
+		}
+
+		.top-sign .text{
+		  background-color: #28394d;
+		  border: solid 1px #54749f;
+		  border-radius: 2px;
+		  width: 100px;
+		  margin: 3px auto;
+		  height: 20px;
+		  color: #fff;
+		  font-size: 12px;
+		  line-height: 20px;
+		  padding: 0px 5px;
+		  box-shadow: inset 0px 0px 3px rgba(0,0,0,.4);
+		  position: relative;
+
+		  text-shadow: 0px 0px 4px rgba(255,255,255, .6);
+		}
+
+		.text .tiny{
+		  font-size: 4px;
+		  line-height: 6px;
+		  text-align: center;
+		  width: 20px;
+		  position: absolute;
+		  right: 35px;
+		  top: 4px;
+		}
+
+		/*
+		#
+		# Door frame
+		#
+		*/
+		.side .door-frame{
+		  position: absolute;
+		  width: 160px;
+		  left: 20px;
+		  top: 35px;
+		  bottom: 0px;
+
+		  background-color: #445d84; 
+		  
+		  box-shadow:inset 0px 2px 8px rgba(0,0,0,.5);
+
+		  z-index: 5;
+		}
+
+
+		.door-frame .door{
+		  position: absolute;
+		  top: 0px;
+		  bottom: 0px;
+		  width: 77px;
+
+		  box-shadow:inset 0px 0px 3px rgba(0,0,0,.7);
+		}
+
+		.door.door-left{
+		  left: 0px;
+		}
+
+		.door.door-right{
+		  right: 0px;
+		}
+
+		/* Insets */
+		.door .door-inset{
+		  position: absolute;
+		  left: 10px;
+		  bottom: 10px;
+
+		  width: 55px;
+		  height: 65px;
+		  box-shadow:inset 0px .5px 5px rgba(0,0,0,.5);
+		}
+
+		.door-inset:nth-of-type(2){
+		  bottom: 85px;
+		}
+
+		.door-inset:nth-of-type(3){
+		  bottom: 160px;
+		}
+
+		/* Sign */
+		.door .sign{
+		  position: absolute;
+		  left: 15px;
+		  bottom: 165px;
+		  width: 45px;
+		  height: 55px;
+		  background-color: #d5e4f6;
+		  box-shadow: inset 1px 0 0 #313d49, inset -1px 0 0 #313d49, inset 0 1px 0 #313d49, inset 0 -1px 0 #313d49;
+		  /*background: url('sign.png') 50% 50% no-repeat;*/
+		}
+
+		/* Window */
+		.door .window{
+		  position: absolute;
+		  left: 10px;
+		  bottom: 235px;
+
+		  width: 55px;
+		  height: 65px;
+		  background-color: #28475d;
+		}
+
+		.window .pane{
+		  width: 14px;
+		  height: 28px;
+		  background-color: #dfe7fc;
+		  float: left;
+		  margin: 2px;
+		  box-shadow: inset 0px 0px 10px #fff;
+		}
+
+		.pane.a{
+		  margin-left: 3px;
+		  margin-right: 1px;
+		}
+
+		.pane.d{
+		  margin-left: 3px;
+		  margin-right: 1px;
+		}
+
+
+		@-webkit-keyframes fade-in {
+		  0% {
+			opacity: 0;
+		  }
+		  14% {
+			opacity: .2;
+		  }
+		  28% {
+			opacity: 0;
+		  }
+		  42% {
+			opacity: .4;
+		  }
+		  56% {
+			opacity: .1;
+		  }
+		  70% {
+			opacity: .6;
+		  }
+		  84%{
+			opacity: .2;
+		  }
+		  100%{
+			opacity: 1;
+		  }
+		}
+
+		@-webkit-keyframes take-off {
+		  0% {
+			-webkit-transform : rotateX(-20deg) rotateY(-30deg) translateY(0px);
+		  }
+		  10%{
+			-webkit-transform : rotateX(-20deg) rotateY(-30deg) translateY(5px);
+		  }
+		  30%{
+			-webkit-transform: rotateX(5deg) rotateY(-60deg) translateY(-30px);
+		  }
+		  50%{
+			-webkit-transform: rotateX(-10deg) rotateY(220deg) translateY(-10px);
+		  }
+		  100%{
+			-webkit-transform : rotateX(-20deg) rotateY(-800deg) translateY(100px);
+		  }
+		}
+
+		@-webkit-keyframes zoom-away {
+		  0% {
+			-webkit-transform : translateZ(-300px);
+		  }
+		  30%{
+			-webkit-transform : translateZ(-300px) rotateY(10deg); 
+		  }
+		  60%{
+			opacity: 1;
+			-webkit-transform : translateZ(110px) rotateX(20deg) rotateY(-10deg);
+		  }
+		  100%{
+			-webkit-transform : translateZ(-30000px) rotateX(-20deg) rotateY(180deg);
+			opacity: 0;
+		  }
+		}
+	</style>
+	<body>
+		<div class="perspective">
+			<div class="tardis-wrap">
+			<div class="tardis">
+			  <!-- start of side -->
+			  <div class="side">
+				<div class="top-sign">
+				  <div class="text">
+					<span class="left">POLICE</span>
+					<span class="tiny">PUBLIC CALL</span>
+					<span class="right">BOX</span>
+				  </div>
+				</div>
+				<div class="door-frame">
+				  <div class="door door-left">
+					<div class="door-inset"></div>
+					<div class="door-inset b"></div>
+					<div class="sign"></div>
+					<div class="window">
+					  <div class="pane a"></div><div class="pane b"></div><div class="pane c"></div>
+					  <div class="pane d"></div><div class="pane e"></div><div class="pane f"></div>
+					</div>
+				  </div>
+				  <div class="door door-right">
+					<div class="door-inset"></div>
+					<div class="door-inset b"></div>
+					<div class="door-inset c"></div>
+					<div class="window">
+					  <div class="pane a"></div><div class="pane b"></div><div class="pane c"></div>
+					  <div class="pane d"></div><div class="pane e"></div><div class="pane f"></div>
+					</div>
+				  </div>
+				</div>
+			  </div>
+			  <!-- end of side -->
+
+			  <!-- start of side -->
+			  <div class="side">
+				<div class="top-sign">
+				  <div class="text">
+					<span class="left">POLICE</span>
+					<span class="tiny">PUBLIC CALL</span>
+					<span class="right">BOX</span>
+				  </div>
+				</div>
+				<div class="door-frame">
+				  <div class="door door-left">
+					<div class="door-inset"></div>
+					<div class="door-inset b"></div>
+					<div class="door-inset c"></div>
+					<div class="window">
+					  <div class="pane a"></div><div class="pane b"></div><div class="pane c"></div>
+					  <div class="pane d"></div><div class="pane e"></div><div class="pane f"></div>
+					</div>
+				  </div>
+				  <div class="door door-right">
+					<div class="door-inset"></div>
+					<div class="door-inset b"></div>
+					<div class="door-inset c"></div>
+					<div class="window">
+					  <div class="pane a"></div><div class="pane b"></div><div class="pane c"></div>
+					  <div class="pane d"></div><div class="pane e"></div><div class="pane f"></div>
+					</div>
+				  </div>
+				</div>
+			  </div>
+			  <!-- end of side -->
+
+			  <!-- start of side -->
+			  <div class="side">
+				<div class="top-sign">
+				  <div class="text">
+					<span class="left">POLICE</span>
+					<span class="tiny">PUBLIC CALL</span>
+					<span class="right">BOX</span>
+				  </div>
+				</div>
+				<div class="door-frame">
+				  <div class="door door-left">
+					<div class="door-inset"></div>
+					<div class="door-inset b"></div>
+					<div class="door-inset c"></div>
+					<div class="window">
+					  <div class="pane a"></div><div class="pane b"></div><div class="pane c"></div>
+					  <div class="pane d"></div><div class="pane e"></div><div class="pane f"></div>
+					</div>
+				  </div>
+				  <div class="door door-right">
+					<div class="door-inset"></div>
+					<div class="door-inset b"></div>
+					<div class="door-inset c"></div>
+					<div class="window">
+					  <div class="pane a"></div><div class="pane b"></div><div class="pane c"></div>
+					  <div class="pane d"></div><div class="pane e"></div><div class="pane f"></div>
+					</div>
+				  </div>
+				</div>
+			  </div>
+			  <!-- end of side -->
+
+			  <!-- start of side -->
+			  <div class="side">
+				<div class="top-sign">
+				  <div class="text">
+					<span class="left">POLICE</span>
+					<span class="tiny">PUBLIC CALL</span>
+					<span class="right">BOX</span>
+				  </div>
+				</div>
+				<div class="door-frame">
+				  <div class="door door-left">
+					<div class="door-inset"></div>
+					<div class="door-inset b"></div>
+					<div class="door-inset c"></div>
+					<div class="window">
+					  <div class="pane a"></div><div class="pane b"></div><div class="pane c"></div>
+					  <div class="pane d"></div><div class="pane e"></div><div class="pane f"></div>
+					</div>
+				  </div>
+				  <div class="door door-right">
+					<div class="door-inset"></div>
+					<div class="door-inset b"></div>
+					<div class="door-inset c"></div>
+					<div class="window">
+					  <div class="pane a"></div><div class="pane b"></div><div class="pane c"></div>
+					  <div class="pane d"></div><div class="pane e"></div><div class="pane f"></div>
+					</div>
+				  </div>
+				</div>
+			  </div>
+			  <!-- end of side -->
+
+			  <div class="roof"></div>
+
+
+			  <div class="roof-top">
+				<div class="roof-panel a"></div>
+				<div class="roof-panel b"></div>
+				<div class="roof-panel c"></div>
+				<div class="roof-panel d"></div>
+				<div class="top-lid"></div>
+			  </div>
+
+
+			  <div class="light">
+				<div class="light-panel a"><div class="bottom"></div><div class="top"></div></div>
+				<div class="light-panel b"><div class="bottom"></div><div class="top"></div></div>
+				<div class="light-panel c"><div class="bottom"></div><div class="top"></div></div>
+				<div class="light-panel d"><div class="bottom"></div><div class="top"></div></div>
+				<div class="light-lid"></div>
+			  </div>
+
+
+			  <!-- start of floor -->
+			  <div class="floor">
+				<div class="floor-panel a"></div>
+				<div class="floor-panel b"></div>
+				<div class="floor-panel c"></div>
+				<div class="floor-panel d"></div>
+				<div class="floor-lid"></div>
+			  </div>
+			  <!-- end of floor -->
+
+
+			</div>
+			</div>
+
+
+		  </div>
+		  <h1 style="margin-top:500px;">Joyeux anniversaire Dr Wendy !</h1>
+		  <h3 style="margin-top:500px;color:white;">Alors non, j'ai pas oublié, mais j'ai été retardé par une histoire de Makro...</h3>
+	</body>
+	<script>
+		'use strict'
+
+		const PI2 = Math.PI * 2
+		let random = (min, max) => Math.random() * (max - min + 1) + min | 0
+
+		class Birthday {
+		  constructor() {
+			this.resize()
+
+			// create a lovely place to store the firework
+			this.fireworks = []
+			this.counter = 0
+
+		  }
+		  resize() {
+			this.width = canvas.width = window.innerWidth
+			let center = this.width / 2 | 0
+			this.spawnA = center - center / 4 | 0
+			this.spawnB = center + center / 4 | 0
+			
+			this.height = canvas.height = window.innerHeight
+			this.spawnC = this.height * .1
+			this.spawnD = this.height * .5
+			
+		  }
+		  onClick(evt) {
+			 let x = evt.clientX || evt.touches && evt.touches[0].pageX
+			 let y = evt.clientY || evt.touches && evt.touches[0].pageY
+			 
+			 let count = random(3,5)
+			 for(let i = 0; i < count; i++) this.fireworks.push(new Firework(
+				random(this.spawnA, this.spawnB),
+				this.height,
+				x,
+				y,
+				random(300, 450),
+				random(30, 110)))
+				  
+			 this.counter = -30
+			 
+		  }
+		  update() {
+			ctx.globalCompositeOperation = 'hard-light'
+			ctx.fillStyle = 'rgba(20,20,20,0.15)'
+			ctx.fillRect(0, 0, this.width, this.height)
+
+			ctx.globalCompositeOperation = 'lighter'
+			for (let firework of this.fireworks) firework.update()
+
+			// if enough time passed... create new new firework
+			if (++this.counter === 15) {
+			  this.fireworks.push(new Firework(
+				random(this.spawnA, this.spawnB),
+				this.height,
+				random(0, this.width),
+				random(this.spawnC, this.spawnD),
+				random(300, 450),
+				random(30, 110)))
+			  this.counter = 0
+			}
+
+			// remove the dead fireworks
+			if (this.fireworks.length > 1000) this.fireworks = this.fireworks.filter(firework => !firework.dead)
+
+		  }
+		}
+
+		class Firework {
+		  constructor(x, y, targetX, targetY, shade, offsprings) {
+			this.dead = false
+			this.offsprings = offsprings
+
+			this.x = x
+			this.y = y
+			this.targetX = targetX
+			this.targetY = targetY
+
+			this.shade = shade
+			this.history = []
+		  }
+		  update() {
+			if (this.dead) return;
+
+			let xDiff = this.targetX - this.x
+			let yDiff = this.targetY - this.y
+			if (Math.abs(xDiff) > 3 || Math.abs(yDiff) > 3) { // is still moving
+			  this.x += xDiff / 20
+			  this.y += yDiff / 20
+
+			  this.history.push({
+				x: this.x,
+				y: this.y
+			  })
+
+			  if (this.history.length > 20) this.history.shift()
+
+			} else {
+			  if (this.offsprings && !this.madeChilds) {
+				
+				let babies = this.offsprings / 2;
+				for (let i = 0; i < babies; i++) {
+				  let targetX = this.x + this.offsprings * Math.cos(PI2 * i / babies) | 0
+				  let targetY = this.y + this.offsprings * Math.sin(PI2 * i / babies) | 0
+
+				  birthday.fireworks.push(new Firework(this.x, this.y, targetX, targetY, this.shade, 0))
+
+				}
+
+			  }
+			  this.madeChilds = true
+			  this.history.shift()
+			}
+			
+			if (this.history.length === 0) this.dead = true
+			else if (this.offsprings) for (let i = 0; this.history.length > i; i++) {
+				let point = this.history[i]
+				ctx.beginPath()
+				ctx.fillStyle = 'hsl(' + this.shade + ',100%,' + i + '%)'
+				ctx.arc(point.x, point.y, 1, 0, PI2, false)
+				ctx.fill()
+			  } else {
+			  ctx.beginPath()
+			  ctx.fillStyle = 'hsl(' + this.shade + ',100%,50%)'
+			  ctx.arc(this.x, this.y, 1, 0, PI2, false)
+			  ctx.fill()
+			}
+
+		  }
+		}
+
+		let canvas = document.getElementById('birthday')
+		let ctx = canvas.getContext('2d')
+
+		let birthday = new Birthday
+		window.onresize = () => birthday.resize()
+		document.onclick = evt => birthday.onClick(evt)
+		document.ontouchstart = evt => birthday.onClick(evt)
+
+		;(function update() {
+		  requestAnimationFrame(update)
+		  birthday.update()
+
+		}())
+	</script>
+</html>
